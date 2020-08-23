@@ -6,8 +6,8 @@ export interface AccountInterface extends Document {
 }
 
 const AccountSchema: Schema = new Schema({
-  id: { type: Number, required: true, unique: true },
-  balance: { type: Number, required: true }
+  id: { type: String, required: true, unique: true },
+  balance: { type: Number, required: true },
 });
 
 const Account = mongoose.model<AccountInterface>('Account', AccountSchema);

@@ -7,9 +7,9 @@ export default class AccountController {
   public balance = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const validator = queryBalanceSchema.validate(req.query);
     if (validator.error === undefined) {
-      const totalBalance = await AccountService.balance(Number(req.query.account_id));
+      const totalBalance = await AccountService.balance(req.query.account_id as string);
       if (totalBalance) {
-        res.status(httpStatus.OK).send(totalBalance);
+        res.status(httpStatus.OK).send(`${totalBalance}`);
       } else {
         res.status(httpStatus.NOT_FOUND).send('0');
       }
