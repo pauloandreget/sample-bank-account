@@ -40,4 +40,19 @@ export default class AccountService {
       return null;
     }
   }
+
+  public static transfer = async (origin: string, destination: string, amount: number): Promise<void | null> => {
+    try {
+      const from = await Account.findOne({ id: origin }).exec();
+      const to = await Account.findOne({ id: destination }).exec();
+      if (from && to) {
+        await Account.updateOne({ _id: from._id }, { balance: from.balance - amount });
+        await Account.updateOne({ _id: to._id }, { balance: to.balance + amount });
+      } else {
+        throw new Error('One or both account not found');
+      }
+    } catch (err) {
+      return null;
+    }
+  }
 }

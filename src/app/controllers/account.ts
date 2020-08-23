@@ -34,6 +34,15 @@ export default class AccountController {
         } else {
           res.status(httpStatus.NOT_FOUND).send('0');
         }
+      } else if (type === 'transfer') {
+        const result = await AccountService.transfer(origin as string, destination as string, Number(amount));
+        if (result === null) {
+          res.status(httpStatus.NOT_FOUND).send('0');
+        } else {
+          const balanceOrigin = await AccountService.balance(origin as string);
+          const balanceDestination = await AccountService.balance(destination as string);
+          res.status(httpStatus.CREATED).send({ origin: { id: origin, balance: balanceOrigin }, destination: { id: destination, balance: balanceDestination } });
+        }
       }
     } else {
       res.status(httpStatus.BAD_REQUEST).send('Bad request');
