@@ -21,12 +21,18 @@ export default class AccountController {
   public event = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { type, destination, origin, amount } = req.body;
     const validator = queryEventSchema.validate(req.body);
-    console.log(validator.error);
     if (validator.error === undefined) {
       if (type === 'deposit') {
         const account = await AccountService.deposit(destination as string, Number(amount));
         if (account) {
           res.status(httpStatus.CREATED).send({ destination: (({ id, balance }) => ({ id, balance }))(account) });
+        }
+      } else if (type === 'withdraw') {
+        const account = await AccountService.withdraw(origin as string, Number(amount));
+        if (account) {
+          res.status(httpStatus.CREATED).send({ origin: (({ id, balance }) => ({ id, balance }))(account) });
+        } else {
+          res.status(httpStatus.NOT_FOUND).send('0');
         }
       }
     } else {

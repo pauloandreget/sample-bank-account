@@ -14,14 +14,27 @@ export default class AccountService {
     }
   }
 
-  public static deposit = async (id: string, amount: number): Promise<AccountInterface | null> => {
+  public static deposit = async (destination: string, amount: number): Promise<AccountInterface | null> => {
     try {
-      const account = await Account.findOne({ id }).exec();
+      const account = await Account.findOne({ id: destination }).exec();
       if (account) {
         return await Account.findOneAndUpdate({ _id: account._id }, { balance: account.balance + amount }, { new: true }).exec();
       } else {
-        const newAccount = new Account({ id, balance: amount });
+        const newAccount = new Account({ id: destination, balance: amount });
         return await newAccount.save();
+      }
+    } catch (err) {
+      return null;
+    }
+  }
+
+  public static withdraw = async (origin: string, amount: number): Promise<AccountInterface | null> => {
+    try {
+      const account = await Account.findOne({ id: origin }).exec();
+      if (account) {
+        return await Account.findOneAndUpdate({ _id: account._id }, { balance: account.balance - amount }, { new: true }).exec();
+      } else {
+        throw new Error('Account not found');
       }
     } catch (err) {
       return null;
