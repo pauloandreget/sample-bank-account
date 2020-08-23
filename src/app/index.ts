@@ -1,5 +1,6 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application } from 'express';
 import * as bodyParser from 'body-parser';
+import routes from './routes';
 
 class App {
   public app: Application;
@@ -17,9 +18,7 @@ class App {
   }
 
   private setRoutes(): void {
-    this.app.get('/', (req: Request, res: Response, next: NextFunction) => {
-      res.send('Ok');
-    });
+    this.app.use('/', routes);
   }
 }
 
