@@ -10,7 +10,7 @@
     "url": "git+https://github.com/pauloandreget/sample-bank-account.git"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "NODE_ENV=production node ./dist/src/server.js",
     "start:dev": "nodemon ./src/server.ts",
     "start:debug": "nodemon --inspect ./src/server.ts",
     "build": "tsc",
