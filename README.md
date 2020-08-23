@@ -1,2 +1,2 @@
 # sample-bank-account
-Sample bank account manager
+Sample bank account application
