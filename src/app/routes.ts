@@ -12,7 +12,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/reset', async (req: Request, res: Response, next: NextFunction) => {
   await Account.deleteMany({}).exec();
-  res.status(httpStatus.OK).send();
+  res.status(httpStatus.OK).send('OK');
 });
 
 router.get('/balance', account.balance);
