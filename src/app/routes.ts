@@ -9,5 +9,6 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.get('/balance', account.balance);
+router.post('/event', account.event);
 
 export default router;
