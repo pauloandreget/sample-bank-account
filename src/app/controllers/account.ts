@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import AccountService from '../services/account';
-import { queryBalanceSchema } from '../helpers/validators/account';
+import { queryBalanceSchema, queryEventSchema } from '../helpers/validators/account';
 
 export default class AccountController {
   public balance = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -12,6 +12,22 @@ export default class AccountController {
         res.status(httpStatus.OK).send(`${totalBalance}`);
       } else {
         res.status(httpStatus.NOT_FOUND).send('0');
+      }
+    } else {
+      res.status(httpStatus.BAD_REQUEST).send('Bad request');
+    }
+  }
+
+  public event = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { type, destination, origin, amount } = req.body;
+    const validator = queryEventSchema.validate(req.body);
+    console.log(validator.error);
+    if (validator.error === undefined) {
+      if (type === 'deposit') {
+        const account = await AccountService.deposit(destination as string, Number(amount));
+        if (account) {
+          res.status(httpStatus.CREATED).send({ destination: (({ id, balance }) => ({ id, balance }))(account) });
+        }
       }
     } else {
       res.status(httpStatus.BAD_REQUEST).send('Bad request');
